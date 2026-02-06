@@ -60,7 +60,6 @@
         <div id="already-done">
             <h1>두번은 안됨</h1>
             <p id="prev-result" style="font-size: 1.5rem; font-weight: bold; margin: 20px 0;"></p>
-            <p style="color: #666;">캡쳐해서 영재에게 보내주세요 🙂</p>
         </div>
     </div>
 
@@ -85,7 +84,7 @@
             const savedResult = localStorage.getItem('ladder_result');
             if (savedResult) {
                 document.getElementById('already-done').style.display = 'flex';
-                document.getElementById('prev-result').innerText = `나의 용돈은: ${savedResult}`;
+                document.getElementById('prev-result').innerText = `${savedResult}`;
                 return;
             }
 
@@ -212,3 +211,4 @@
 </body>
 
 </html>
+
