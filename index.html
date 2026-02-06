@@ -164,16 +164,16 @@
 const finalResult = `${startItems[startIndex]} → ${resultValue}`;
 
 setTimeout(() => {
-    // 1. 방금 나온 결과를 다시 한번 명확하게 정의합니다.
-    const currentResult = `내 용돈은: ${startItems[startIndex]} → ${resultValue}`;
-    
-    // 2. 팝업창을 띄웁니다 (이때 변수는 ${resultValue}를 사용!)
+    // 1. 저장할 결과 문구를 여기서 먼저 만듭니다. (이 줄이 꼭 있어야 합니다!)
+    const finalResult = `내 용돈은: ${startItems[startIndex]} → ${resultValue}`;
+
+    // 2. 팝업창 띄우기 (멘트 삭제 버전)
     alert(`두근두근 결과는…!\n👉 ${resultValue} 👈`); 
     
-    // 3. 사용자가 확인을 누르면 '방금 그 결과'를 저장합니다.
-    localStorage.setItem('ladder_result', currentResult);
+    // 3. 확인을 누르면 브라우저에 결과를 저장합니다.
+    localStorage.setItem('ladder_result', finalResult);
     
-    // 4. 새로고침하여 차단 화면으로 보냅니다.
+    // 4. 즉시 새로고침하여 "두번은 안됨" 화면으로 전환합니다.
     location.reload(); 
 }, 300);
         }
@@ -190,6 +190,7 @@ setTimeout(() => {
     </script>
 </body>
 </html>
+
 
 
 
