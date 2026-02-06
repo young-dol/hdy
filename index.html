@@ -160,13 +160,20 @@
             resultBox.innerText = resultValue;
             resultBox.style.background = "#000"; resultBox.style.color = "#fff";
             
-            const finalResult = `내 용돈은: ${startItems[startIndex]} → ${resultValue}`;
-            localStorage.setItem('ladder_result', finalResult);
+           // 게임 결과가 나온 후 실행되는 부분입니다.
+const finalResult = `내 용돈은: ${startItems[startIndex]} → ${resultValue}`;
 
-            setTimeout(() => {
-                alert(`두근두근 결과는…!\n👉 ${resultValue}원👈\`);
-                location.reload(); // 확인을 누르면 "두번은 안됨" 화면으로 넘어갑니다.
-            }, 300);
+setTimeout(() => {
+    // 1. 팝업창 띄우기 (멘트 삭제 버전)
+    alert(`두근두근 결과는…!\n👉 ${resultValue} 👈`); 
+    
+    // 2. [확인]을 누르면 그제야 브라우저에 결과를 저장합니다.
+    // 이렇게 해야 팝업을 먼저 보고, 나중에 재접속했을 때 "두번은 안됨"이 뜹니다.
+    localStorage.setItem('ladder_result', finalResult);
+    
+    // 3. 페이지를 새로고침하여 즉시 "두번은 안됨" 화면으로 전환합니다.
+    location.reload(); 
+}, 300);
         }
 
         function move(el, val) {
@@ -181,6 +188,7 @@
     </script>
 </body>
 </html>
+
 
 
 
