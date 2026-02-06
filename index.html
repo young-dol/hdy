@@ -156,26 +156,30 @@
 
             const resultNum = getRandomResult();
             const resultValue = resultNum + "만"; 
+           // 1. 사다리가 도착한 칸의 숫자(9, 19, 000 등)를 가져옵니다.
             const resultBox = document.getElementById(`end-${currentXIndex}`);
-            resultBox.innerText = resultValue;
-            resultBox.style.background = "#000"; resultBox.style.color = "#fff";
+            const resultNum = resultBox.innerText; 
             
-           // 게임 결과가 나온 후 실행되는 부분입니다.
-const finalResult = `${startItems[startIndex]} → ${resultValue}`;
+            // 2. 어떤 숫자가 오든 뒤에 무조건 "만"을 붙입니다.
+            const resultValue = resultNum + "만"; // 결과 예시: 9만, 000만
 
-setTimeout(() => {
-    // 1. 저장할 결과 문구를 여기서 먼저 만듭니다. (이 줄이 꼭 있어야 합니다!)
-    const finalResult = `내 용돈은: ${startItems[startIndex]} → ${resultValue}`;
+            // 3. 당첨된 칸의 색상을 변경합니다.
+            resultBox.style.background = "#000"; 
+            resultBox.style.color = "#fff";
+            
+            // 4. "두번은 안됨" 화면에 저장할 문구를 만듭니다.
+            const finalResultText = `결과: ${startItems[startIndex]} → ${resultValue}`;
 
-    // 2. 팝업창 띄우기 (멘트 삭제 버전)
-    alert(`두근두근 결과는…!\n👉 ${resultValue} 👈`); 
-    
-    // 3. 확인을 누르면 브라우저에 결과를 저장합니다.
-    localStorage.setItem('ladder_result', finalResult);
-    
-    // 4. 즉시 새로고침하여 "두번은 안됨" 화면으로 전환합니다.
-    location.reload(); 
-}, 300);
+            setTimeout(() => {
+                // 이제 팝업창에 "000만" 또는 "9만"이라고 영재님이 원하신 대로 뜹니다!
+                alert(`두근두근 결과는…!\n👉 ${resultValue} 👈`); 
+                
+                // 브라우저에 결과를 저장하여 재참여를 막습니다.
+                localStorage.setItem('ladder_result', finalResultText);
+                
+                // 페이지를 새로고침하여 차단 화면을 보여줍니다.
+                location.reload(); 
+            }, 300);
         }
 
         function move(el, val) {
@@ -190,6 +194,7 @@ setTimeout(() => {
     </script>
 </body>
 </html>
+
 
 
 
