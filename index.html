@@ -157,27 +157,30 @@
             const resultNum = getRandomResult();
             const resultValue = resultNum + "만"; 
            // 1. 사다리가 도착한 칸의 숫자(9, 19, 000 등)를 가져옵니다.
-            const resultBox = document.getElementById(`end-${currentXIndex}`);
-            const resultNum = resultBox.innerText; 
+           // --- 이 아래부터 끝까지 싹 지우고 이걸로 붙여넣으세요 ---
             
-            // 2. 어떤 숫자가 오든 뒤에 무조건 "만"을 붙입니다.
-            const resultValue = resultNum + "만"; // 결과 예시: 9만, 000만
+            // 1. 사다리가 실제 도착한 칸의 글자(9, 19, 000 등)를 가져옵니다.
+            const resultBox = document.getElementById(`end-${currentXIndex}`);
+            const finalNum = resultBox.innerText; 
+            
+            // 2. 어떤 숫자가 오든 뒤에 무조건 "만"을 붙입니다. (영재님 요청)
+            const finalValue = finalNum + "만"; 
 
             // 3. 당첨된 칸의 색상을 변경합니다.
             resultBox.style.background = "#000"; 
             resultBox.style.color = "#fff";
             
             // 4. "두번은 안됨" 화면에 저장할 문구를 만듭니다.
-            const finalResultText = `결과: ${startItems[startIndex]} → ${resultValue}`;
+            const finalResultText = `결과: ${startItems[startIndex]} → ${finalValue}`;
 
             setTimeout(() => {
-                // 이제 팝업창에 "000만" 또는 "9만"이라고 영재님이 원하신 대로 뜹니다!
-                alert(`두근두근 결과는…!\n👉 ${resultValue} 👈`); 
+                // 팝업창에 "000만" 또는 "9만"이라고 표시됩니다.
+                alert(`두근두근 결과는…!\n👉 ${finalValue} 👈`); 
                 
                 // 브라우저에 결과를 저장하여 재참여를 막습니다.
                 localStorage.setItem('ladder_result', finalResultText);
                 
-                // 페이지를 새로고침하여 차단 화면을 보여줍니다.
+                // 페이지를 새로고침하여 "두번은 안됨" 화면을 보여줍니다.
                 location.reload(); 
             }, 300);
         }
@@ -194,6 +197,7 @@
     </script>
 </body>
 </html>
+
 
 
 
