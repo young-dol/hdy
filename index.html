@@ -9,42 +9,28 @@
             margin: 0; height: 100vh; display: flex; justify-content: center; 
             align-items: center; background-color: #ffffff; font-family: 'Malgun Gothic', sans-serif; 
         }
-
-        .game-wrapper {
-            width: 100%; max-width: 600px;
-            padding: 0 20px; text-align: center;
-        }
-
-        #main-title { margin-bottom: 60px; color: #333; font-size: 1.6rem; font-weight: bold; }
-
-        .ladder-wrapper {
-            display: flex; justify-content: space-between; position: relative;
-            width: 100%; height: 350px; margin: 0 auto;
-        }
-
-        .ladder-line { position: relative; width: 0; flex: 1; display: flex; justify-content: center; }
+        .game-wrapper { width: 100%; max-width: 550px; padding: 0 10px; text-align: center; }
+        #main-title { margin-bottom: 40px; color: #333; font-size: 1.5rem; font-weight: bold; }
         
+        /* 사다리 높이를 350px로 조절하여 노트북에서도 잘 보이게 함 */
+        .ladder-wrapper { display: flex; justify-content: space-between; position: relative; width: 100%; height: 350px; margin: 0 auto; }
+        .ladder-line { position: relative; width: 0; flex: 1; display: flex; justify-content: center; }
         .column { position: absolute; width: 3px; height: 100%; background: #000; top: 0; left: 50%; transform: translateX(-50%); z-index: 1; }
         .bridge { position: absolute; height: 3px; background: #000; z-index: 1; pointer-events: none; }
-        
-        .label { position: absolute; width: 80px; text-align: center; font-weight: bold; left: 50%; transform: translateX(-50%); z-index: 5; }
-        
+        .label { position: absolute; width: 70px; text-align: center; font-weight: bold; left: 50%; transform: translateX(-50%); z-index: 5; }
         .top-label { 
-            top: -60px; font-size: 1.5rem; cursor: pointer; color: #000;
+            top: -55px; font-size: 1.4rem; cursor: pointer; color: #000;
             background: #fff; border: 2.5px solid #000; border-radius: 10px;
-            padding: 8px 0; transition: all 0.2s; line-height: 1;
+            padding: 6px 0; transition: all 0.2s; line-height: 1;
         }
         .top-label:hover { background: #000; color: #fff; }
-        
-        .bottom-label { bottom: -60px; font-size: 1.3rem; color: #000; border: 1.5px solid #ccc; border-radius: 6px; padding: 5px 0; background: #fff; }
-
+        .bottom-label { bottom: -55px; font-size: 1.2rem; color: #000; border: 1.5px solid #ccc; border-radius: 6px; padding: 4px 0; background: #fff; }
         .runner {
-            position: absolute; width: 55px; height: 45px; background: #000;
+            position: absolute; width: 50px; height: 40px; background: #000;
             color: #fff; display: flex; align-items: center; justify-content: center;
-            border-radius: 6px; font-weight: bold; font-size: 1.3rem;
+            border-radius: 6px; font-weight: bold; font-size: 1.2rem;
             left: 50%; transform: translate(-50%, -50%); z-index: 10;
         }
-
         #already-done {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #ffffff; z-index: 100; flex-direction: column; justify-content: center; align-items: center;
@@ -58,24 +44,26 @@
         <div id="ladder-container" class="ladder-wrapper"></div>
 
         <div id="already-done">
-            <h1>두번은 안됨</h1>
-            <p id="prev-result" style="font-size: 1.5rem; font-weight: bold; margin: 20px 0;"></p>
+            <h1 style="font-size: 3rem; margin-bottom: 20px;">두번은 안됨</h1>
+            <p id="prev-result" style="font-size: 1.6rem; font-weight: bold; margin: 20px 0; color: #e74c3c;"></p>
+            <p style="color: #666;">캡쳐해서 영재에게 보내주세요 🙂</p>
         </div>
     </div>
 
     <script>
         const container = document.getElementById('ladder-container');
         const startItems = ["홍", "동", "열", "바", "보"];
-        const displayItems = ["9", "19", "29", "39", "000"];
+        const displayItems = ["9", "19", "29", "39", "000"]; 
         const columnCount = startItems.length;
         let bridges = [];
         let isRunning = false;
 
+       // 확률 (9만 90%, 19만 5%, 29만 2%, 39만 2%, 000 1%)
         function getRandomResult() {
             const rand = Math.random() * 100;
-            if (rand < 80) return "9";        
-            if (rand < 90) return "19";       
-            if (rand < 95) return "29";       
+            if (rand < 90) return "9";        
+            if (rand < 95) return "19";       
+            if (rand < 97) return "29";       
             if (rand < 99) return "39";       
             return "000";                     
         }
@@ -84,60 +72,42 @@
             const savedResult = localStorage.getItem('ladder_result');
             if (savedResult) {
                 document.getElementById('already-done').style.display = 'flex';
-                document.getElementById('prev-result').innerText = `${savedResult}`;
+                document.getElementById('prev-result').innerText = savedResult;
                 return;
             }
 
             container.innerHTML = '';
-
             for (let i = 0; i < columnCount; i++) {
                 const line = document.createElement('div');
-                line.className = 'ladder-line';
-                line.id = `line-${i}`;
-
-                const col = document.createElement('div');
-                col.className = 'column';
-                line.appendChild(col);
-
-                const top = document.createElement('div');
-                top.className = 'label top-label';
-                top.innerText = startItems[i];
-                top.onclick = () => startGame(i);
-                line.appendChild(top);
-
-                const bottom = document.createElement('div');
-                bottom.className = 'label bottom-label';
-                bottom.innerText = displayItems[i];
-                bottom.id = `end-${i}`;
-                line.appendChild(bottom);
-
+                line.className = 'ladder-line'; line.id = `line-${i}`;
+                line.innerHTML = `
+                    <div class="column"></div>
+                    <div class="label top-label" onclick="startGame(${i})">${startItems[i]}</div>
+                    <div class="label bottom-label" id="end-${i}">${displayItems[i]}</div>
+                `;
                 container.appendChild(line);
             }
-            setTimeout(createBridges, 100);
+            createBridges(); 
         }
 
+        // 다리를 불규칙하게 생성하는 핵심 함수
         function createBridges() {
             document.querySelectorAll('.bridge').forEach(b => b.remove());
             bridges = [];
-            
             const lines = document.getElementsByClassName('ladder-line');
-            if (lines.length < 2) return;
             const spacing = lines[1].getBoundingClientRect().left - lines[0].getBoundingClientRect().left;
 
             for (let i = 0; i < columnCount - 1; i++) {
-                const bridgeCount = 6; 
                 let possibleHeights = [];
-                for(let h=60; h < container.offsetHeight - 60; h += 40) possibleHeights.push(h);
-                possibleHeights.sort(() => Math.random() - 0.5);
-                const selectedHeights = possibleHeights.slice(0, bridgeCount);
-
-                selectedHeights.forEach(y => {
+                // 높이를 다양하게 섞기 위해 20px 단위로 후보 생성
+                for(let h=40; h < 310; h += 20) possibleHeights.push(h);
+                
+                // 무작위로 섞어서 5~6개만 선택 (일직선 방지)
+                possibleHeights.sort(() => Math.random() - 0.5).slice(0, 6).forEach(y => {
                     const b = document.createElement('div');
                     b.className = 'bridge';
                     b.style.width = spacing + 'px';
-                    b.style.left = '50%'; 
-                    b.style.top = y + 'px';
-                    
+                    b.style.left = '50%'; b.style.top = y + 'px';
                     document.getElementById(`line-${i}`).appendChild(b);
                     bridges.push({ xIndex: i, y: y });
                 });
@@ -149,6 +119,7 @@
             if (isRunning) return;
             isRunning = true;
 
+            // 클릭한 순간 다리를 무작위로 다시 생성!
             createBridges(); 
 
             const runner = document.createElement('div');
@@ -158,58 +129,45 @@
 
             let currentXIndex = startIndex;
             let currentY = 0;
-            const targetY = container.offsetHeight;
 
-            while (currentY < targetY) {
-                const bridge = bridges.find(b => 
-                    b.y > currentY + 2 && (b.xIndex === currentXIndex || b.xIndex === currentXIndex - 1)
-                );
-
+            while (currentY < 350) {
+                const bridge = bridges.find(b => b.y > currentY + 2 && (b.xIndex === currentXIndex || b.xIndex === currentXIndex - 1));
                 if (bridge) {
-                    await moveElement(runner, bridge.y, "top");
+                    await move(runner, bridge.y);
                     currentY = bridge.y;
-                    
-                    const nextXIndex = (bridge.xIndex === currentXIndex) ? currentXIndex + 1 : currentXIndex - 1;
-                    document.getElementById(`line-${nextXIndex}`).appendChild(runner);
-                    currentXIndex = nextXIndex;
-                    await moveElement(runner, currentY, "top");
+                    currentXIndex = (bridge.xIndex === currentXIndex) ? currentXIndex + 1 : currentXIndex - 1;
+                    document.getElementById(`line-${currentXIndex}`).appendChild(runner);
+                    await move(runner, currentY);
                 } else {
-                    await moveElement(runner, targetY, "top");
-                    currentY = targetY;
+                    await move(runner, 350);
+                    currentY = 350;
                 }
             }
 
             const resultNum = getRandomResult();
             const resultValue = resultNum + "만"; 
-            
             const resultBox = document.getElementById(`end-${currentXIndex}`);
             resultBox.innerText = resultValue;
-            resultBox.style.background = "#000";
-            resultBox.style.color = "#fff";
+            resultBox.style.background = "#000"; resultBox.style.color = "#fff";
             
-            const finalResult = `${startItems[startIndex]} → ${resultValue}`;
+            const finalResult = `내 용돈은: ${startItems[startIndex]} → ${resultValue}`;
             localStorage.setItem('ladder_result', finalResult);
 
             setTimeout(() => {
-                // 팝업 멘트
-                alert(`두근두근 결과는…!\n👉 ${resultValue} 👈\n캡쳐해서 영재에게 보내주세요 🙂`);
+                alert(`결과: ${resultValue}원 당첨!\n캡쳐해서 영재에게 보내세요🙂`);
                 location.reload(); 
-            }, 300);
+            }, 500);
         }
 
-        function moveElement(el, val, type) {
+        function move(el, val) {
             return new Promise(resolve => {
-                el.style.transition = "all 0.15s linear";
-                el.style[type] = val + 'px';
-                setTimeout(resolve, 160);
+                el.style.transition = "all 0.1s linear";
+                el.style.top = val + 'px';
+                setTimeout(resolve, 110);
             });
         }
 
         window.onload = init;
-        window.onresize = createBridges;
     </script>
 </body>
-
 </html>
-
-
